@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-aksdemo
+  label:
+    app: aksdemo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aksdemo
+  template:
+    metadata:
+      labels:
+        app: aksdemo
+    spec:
+      containers:
+      - name: aksdemo
+        image: delregistry.azurecr.io/aksdemo
+        env:
+        - name: DATABASE_HOST
+          value: "mysql-mysqlaksdemo.mysql.database.azure.com"
+        - name: DATABASE_USERNAME
+          value: "delacct@aks-mysqlserver"
+        - name: DATABASE_PASSWORD
+          value: "H@Sh1CoR3!"
+        - name: DATABASE_NAME    
+          value: "hplus" 
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aks-aksdemo 
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 8080
+
+  selector:
+    app: aksdemo
+---
