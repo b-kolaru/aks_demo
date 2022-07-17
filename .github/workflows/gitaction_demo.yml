@@ -6,6 +6,8 @@ name: Java CI with gitaction
 on:
   push:
     branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
 
 jobs:
 
