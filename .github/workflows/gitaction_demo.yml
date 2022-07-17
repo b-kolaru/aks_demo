@@ -6,7 +6,6 @@ name: Java CI with gitaction
 on:
   push:
     branches: [ "master" ]
-  
 
 jobs:
 
@@ -122,16 +121,16 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag akscicd:$(date +%s)
     
-env:
-  AZURE_CONTAINER_REGISTRY: "your-azure-container-registry"
-  CONTAINER_NAME: "your-container-name"
-  RESOURCE_GROUP: "your-resource-group"
-  CLUSTER_NAME: "your-cluster-name"
-  IMAGE_PULL_SECRET_NAME: "your-image-pull-secret-name"
-  DEPLOYMENT_MANIFEST_PATH: 'your-deployment-manifest-path'
+  env:
+    AZURE_CONTAINER_REGISTRY: "delregistry"
+    CONTAINER_NAME: ${{ secret.CONTAINER_NAME}}
+    RESOURCE_GROUP: ${{ secret.RESOURCE_GROUP}}
+    CLUSTER_NAME: ${{ secret.CLUSTER_NAME}}
+    IMAGE_PULL_SECRET_NAME: ${{ secret.IMAGE_PULL_SECRET_NAME}}
+    DEPLOYMENT_MANIFEST_PATH: ${{ secret.IMAGE_PULL_SECRET_NAME}}
 
 
-buildImage:
+  buildImage:
     permissions:
       contents: read
       id-token: write
@@ -144,9 +143,9 @@ buildImage:
     - name: Azure login
       uses: azure/login@v1.4.3
       with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        client-id: ${{ secrets.ARM_CLIENT_ID }}
+        tenant-id: $${{ secrets.ARM_TENANT_ID }}
+        subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       
     # Builds and pushes an image up to your Azure Container Registry
     - name: Build and push image to ACR
@@ -163,21 +162,21 @@ buildImage:
     - name: Azure login
       uses: azure/login@v1.4.3
       with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        client-id: ${{ secrets.ARM_CLIENT_ID }}
+        tenant-id: ${{ secrets.ARM_TENANT_ID }}
+        subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       
     # Retrieves your Azure Kubernetes Service cluster's kubeconfig file
     - name: Get K8s context
       uses: azure/aks-set-context@v2.0
       with:
-        resource-group: ${{ env.RESOURCE_GROUP }}
-        cluster-name: ${{ env.CLUSTER_NAME }}
+        resource-group: ${{ secret.RESOURCE_GROUP }}
+        cluster-name: ${{ secret.CLUSTER_NAME }}
 
     # Retrieves the credentials for pulling images from your Azure Container Registry
     - name: Get ACR credentials
       run: |
-        az acr update -n ${{ env.AZURE_CONTAINER_REGISTRY }} -g ${{ env.RESOURCE_GROUP }} --admin-enabled true
+        az acr update -n ${{ secret.AZURE_CONTAINER_REGISTRY }} -g ${{ secret.RESOURCE_GROUP }} --admin-enabled true
         ACR_USERNAME=$(az acr credential show -g ${{ env.RESOURCE_GROUP }} -n ${{ env.AZURE_CONTAINER_REGISTRY }} --query username -o tsv)
         ACR_PASSWORD=$(az acr credential show -g ${{ env.RESOURCE_GROUP }} -n ${{ env.AZURE_CONTAINER_REGISTRY }} --query passwords[0].value -o tsv)
         echo "::add-mask::${ACR_USERNAME}"
