@@ -20,7 +20,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ./remote_setup
+        working-directory: ./basic setup
 
     steps:
     # Checkout the repository to the GitHub Actions runner
