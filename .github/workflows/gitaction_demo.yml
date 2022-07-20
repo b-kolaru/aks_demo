@@ -115,8 +115,21 @@ jobs:
     - name: Build with Maven
       run: |
         mvn -B package --file ./aksdemo/pom.xml
-        mkdir staging && ./aksdemo/target/*.jar staging
-
+        
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.0
+      with:
+    # Artifact name
+        name: snapshot
+   
+        path: ./aksdemo/target/*.jar
+        
+    - name: Download a Build Artifact
+      uses: actions/download-artifact@v3.0.0
+      with:
+        name: snapshot
+        path: ./aksdemo/target 
+       
 #build docker image once maven build is finished
   build-docker:
   
