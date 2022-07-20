@@ -97,7 +97,8 @@ jobs:
         ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
         ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       run: terraform apply -auto-approve
-      
+ 
+ #build maven package and save to target file
   build-maven:
 
     runs-on: ubuntu-latest
