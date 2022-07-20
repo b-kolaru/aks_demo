@@ -115,7 +115,7 @@ jobs:
     - name: Build with Maven
       run: |
         mvn -B package --file ./aksdemo/pom.xml
-        mkdir staging && target/*.jar staging
+        mkdir staging && ./aksdemo/target/*.jar staging
 
 #build docker image once maven build is finished
   build-docker:
