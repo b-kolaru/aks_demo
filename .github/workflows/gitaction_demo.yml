@@ -113,7 +113,9 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: mvn -B package --file ./aksdemo/pom.xml
+      run: |
+        mvn -B package --file ./aksdemo/pom.xml
+        mkdir ./target && cp target/*.jar ./target
 
 #build docker image once maven build is finished
   build-docker:
