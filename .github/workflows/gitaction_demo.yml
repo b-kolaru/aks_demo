@@ -115,24 +115,5 @@ jobs:
     - name: Build with Maven
       run: |
         mvn -B package --file ./aksdemo/pom.xml
-        
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3.1.0
-      with:
-    # Artifact name
-        name: snapshot
-   
-        path: ./aksdemo/target/*.jar
-        
-    - name: Download a Build Artifact
-      uses: actions/download-artifact@v3.0.0
-      with:
-        name: snapshot
-        path: ./aksdemo/target 
-       
-#build docker image once maven build is finished
-  
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build . --file ./aksdemo/Dockerfile --tag akscicd:$(date +%s)
+        docker build . --file ./aksdemo/Dockerfile --tag akscicd:$(date +%s)
   
