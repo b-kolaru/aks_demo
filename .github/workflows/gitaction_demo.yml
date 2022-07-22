@@ -122,6 +122,11 @@ jobs:
     - name: Build with Maven
       run: |
         mvn -B package --file ./aksdemo/pom.xml
-        run: docker build . --file ./aksdemo/Dockerfile --tag aksdemo:$(date +%s)
         
-  
+  build-docker:
+    runs-on: ubuntu-latest  
+    needs: [build-maven-docker]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the Docker image
+        run: docker build . --file ./aksdemo/Dockerfile --tag aksdemo:$(date +%s)
