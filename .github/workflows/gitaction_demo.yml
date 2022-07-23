@@ -116,18 +116,18 @@ jobs:
     - name: Build with Maven
       run: |
         mvn -B package --file ./aksdemo/pom.xml
-        mkdir aksdemo_mvn && COPY target/aksdemo-0.0.1-SNAPSHOT.jar aksdemo_mvn/
+       
     - uses: actions/upload-artifact@v1
       with:
        name: aksdemo_package
-       path: aksdemo_mvn/
+       path: target/
        
     - uses: actions/checkout@v1
 
     - uses: actions/download-artifact@v1
       with:
           name: aksdemo_package
-          path: aksdemo_mvn/
+          path: target/
           
     - name: Cache local Maven repository
       uses: actions/cache@v2
