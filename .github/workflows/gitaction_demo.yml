@@ -116,7 +116,14 @@ jobs:
     - name: Build with Maven
       run: |
         mvn -B package --file ./aksdemo/pom.xml
-       
+        
+    - name: Cache local Maven repository
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+                      ${{ runner.os }}-maven-          
     - uses: actions/upload-artifact@v1
       with:
        name: aksdemo_package
@@ -129,13 +136,7 @@ jobs:
           name: aksdemo_package
           path: target/
           
-    - name: Cache local Maven repository
-      uses: actions/cache@v2
-      with:
-        path: ~/.m2
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-                      ${{ runner.os }}-maven-       
+    
   build-docker:
     runs-on: ubuntu-latest  
     needs: [build-maven-docker]
