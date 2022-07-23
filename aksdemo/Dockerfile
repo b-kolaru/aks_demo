@@ -1,6 +1,4 @@
 FROM openjdk:11
+ADD ./target/aksdemo-0.0.1-SNAPSHOT.jar aksdemo.jar
 EXPOSE 8080
-RUN mkdir target
-ARG JAR_FILE=./target/*.jar
-COPY ${JAR_FILE}  ./aksdemo/target/aksdemo.jar
-ENTRYPOINT ["java","-jar","/target/aksdemo.jar"]
+ENTRYPOINT ["java", "-jar" , "aksdemo.jar"]
