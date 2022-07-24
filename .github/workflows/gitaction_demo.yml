@@ -11,6 +11,18 @@ on:
 
 jobs:
 
+  terraform:
+    name: 'Terraform'
+    runs-on: ubuntu-latest
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    # Set the working directory to main for the config files
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ github.workspace }}/target
+  
+  #build maven package and save to target file
   build-maven-docker:
 
     runs-on: ubuntu-latest
@@ -27,7 +39,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/.m2
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        key: ${{ runner.os }}-maven-${{ hashFiles(./aksdemo/pom.xml') }}
         restore-keys: |
                       ${{ runner.os }}-maven-     
     - name: Build with Maven
