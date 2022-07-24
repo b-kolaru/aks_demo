@@ -33,10 +33,4 @@ jobs:
       working-directory: ${{ github.workspace }}/target
       run: |
         mvn -B package --file ./aksdemo/pom.xml
-        run: docker build . --file ./aksdemo/Dockerfile --tag aksdemo:$(date +%s)
-        
-       
-          
-    
-
-        run: docker build . --file ./aksdemo/Dockerfile --tag aksdemo:$(date +%s)
+        docker build . --file ./aksdemo/Dockerfile --tag aksdemo:$(date +%s)
