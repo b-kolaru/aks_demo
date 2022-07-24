@@ -24,7 +24,6 @@ jobs:
         cache: maven
     
     - name: Build with Maven
-      working-directory: ${{ github.workspace }}/target
       run: |
         mvn -B package --file ./aksdemo/pom.xml
         docker build . --file ./aksdemo/Dockerfile --tag aksdemo:$(date +%s)
